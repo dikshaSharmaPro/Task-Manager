@@ -1,23 +1,24 @@
-# taskmanager
+#  Task Management App
 
-A new Flutter project.
+A beautiful and intuitive Task Management App built using **Flutter**, powered by **Provider** for state management, **SharedPreferences** for local storage, and integrated with **Supabase** for backend operations.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+-  Add, edit, delete tasks
+-  Mark tasks as completed
+-  Select custom date & time for each task
+-  Persistent task storage using SharedPreferences
+-  Supabase integration for syncing tasks (optional/bonus)
+-  Animated task list
+-  Dark-themed, gradient-rich UI
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+##  Tech Stack
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# Taskmanager
-# Task-Manager
-# Task-Manager
-# Task-Manager
-# taskmanager-supabase
-# taskmanager-supabase
-# Task-Manager
+- **Flutter** 
+- **Provider** (State Management)
+- **SharedPreferences** (Local Storage)
+- **Supabase** (Backend DB, Auth)
+- **Dart**
+- **Intl** for date formatting
