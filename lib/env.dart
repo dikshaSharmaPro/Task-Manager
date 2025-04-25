@@ -1,0 +1,3 @@
+const supabaseUrl = 'https://zdhnfwwkaenbnkmritfe.supabase.co';
+const supabaseAnonKey =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkaG5md3drYWVuYm5rbXJpdGZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0MDgwNjksImV4cCI6MjA2MDk4NDA2OX0.kMRNcRJ3WzJc6A_8DWbg5eA17Ge2lH0gNv5xX3DCN1w';
