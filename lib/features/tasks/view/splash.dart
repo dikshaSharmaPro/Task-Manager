@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:taskmanager/core/routes.dart';
-import 'package:taskmanager/features/tasks/provider/task_provider.dart';
+
+import 'package:taskmanager/features/tasks/provider/task_bloc.dart';
 import 'package:taskmanager/features/tasks/widgets/animatedlogo.dart';
+
+import '../provider/task_managementlogic.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,10 +22,14 @@ class _SplashScreenState extends State<SplashScreen> {
     loadTasksAndNavigate();
   }
 
-  loadTasksAndNavigate() async {
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+  void loadTasksAndNavigate() async {
+    context.read<TaskBloc>().add(LoadTasksEvent());
 
-    await taskProvider.loadTasks();
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, AppRoutes.task);
+    }
   }
 
   @override

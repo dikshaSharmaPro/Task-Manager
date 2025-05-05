@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskmanager/env.dart';
-import 'features/tasks/provider/task_provider.dart';
+import 'package:taskmanager/features/tasks/provider/task_bloc.dart';
+import 'features/tasks/provider/task_managementlogic.dart';
 import 'core/routes.dart';
 
 Future<void> main() async {
@@ -18,8 +20,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => TaskProvider(),
+    return BlocProvider(
+      create: (_) => TaskBloc()..add(LoadTasksEvent()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Task Manager',

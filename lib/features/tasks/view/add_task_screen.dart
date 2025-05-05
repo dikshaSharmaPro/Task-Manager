@@ -3,7 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:taskmanager/core/app_Logic.dart';
 import 'package:taskmanager/features/tasks/data/task_model.dart';
-import 'package:taskmanager/features/tasks/provider/task_provider.dart';
+import 'package:taskmanager/features/tasks/provider/task_bloc.dart';
+import 'package:taskmanager/features/tasks/provider/task_managementlogic.dart';
 import 'package:taskmanager/features/tasks/widgets/customtextfield.dart';
 
 import 'package:uuid/uuid.dart';
@@ -30,8 +31,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       titleController.text = widget.taskToEdit!.title;
       descController.text = widget.taskToEdit!.description;
       selectedDate = DateFormat.yMMMd().add_jm().parse(
-        widget.taskToEdit!.datetime,
-      );
+            widget.taskToEdit!.datetime,
+          );
     }
   }
 
@@ -64,7 +65,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   void _saveTask() {
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     final title = titleController.text.trim();
     final desc = descController.text.trim();
 
@@ -87,8 +87,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         description: desc,
         datetime: formattedDate,
       );
-      taskProvider.addTask(newTask);
 
+      context.read<TaskBloc>().add(AddTaskEvent(newTask));
       addTaskToSupabase(id, title, desc, formattedDate);
     } else {
       final updatedTask = widget.taskToEdit!.copyWith(
@@ -96,13 +96,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         description: desc,
         datetime: formattedDate,
       );
-      taskProvider.updateTask(updatedTask);
 
+      context.read<TaskBloc>().add(UpdateTaskEvent(updatedTask));
       updateTaskInSupabase(
-        id: widget.taskToEdit!.id,
-        title: title,
-        description: desc,
-        datetime: formattedDate,
+        id: updatedTask.id,
+        title: updatedTask.title,
+        description: updatedTask.description,
+        datetime: updatedTask.datetime,
       );
     }
 
@@ -180,10 +180,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           ? DateFormat.yMMMd().add_jm().format(selectedDate!)
                           : 'Select Date & Time',
                       style: TextStyle(
-                        color:
-                            selectedDate != null
-                                ? Colors.white
-                                : Colors.white54,
+                        color: selectedDate != null
+                            ? Colors.white
+                            : Colors.white54,
                         fontSize: 16,
                       ),
                     ),
