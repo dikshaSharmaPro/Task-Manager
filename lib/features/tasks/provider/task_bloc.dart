@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskmanager/features/tasks/provider/task_provider.dart';
+import 'package:taskmanager/features/tasks/provider/task_managementlogic.dart';
 
 import '../data/shared_pref.dart';
 import '../data/task_model.dart';

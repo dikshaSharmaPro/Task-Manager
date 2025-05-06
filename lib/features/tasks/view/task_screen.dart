@@ -4,6 +4,7 @@ import 'package:taskmanager/core/routes.dart';
 import 'package:taskmanager/features/tasks/provider/task_bloc.dart';
 import 'package:taskmanager/features/tasks/provider/task_managementlogic.dart';
 import 'package:taskmanager/features/tasks/provider/task_state.dart';
+import 'package:taskmanager/features/tasks/widgets/task_pie_chart.dart';
 
 import '../widgets/animated_task_list.dart';
 
@@ -111,9 +112,44 @@ class _TaskScreenState extends State<TaskScreen> {
           }
         },
         builder: (context, state) {
-          return AnimatedTaskList(
-            listKey: _listKey,
-            tasks: state.tasks,
+          int totalTasks = state.tasks.length;
+          int completedTasks =
+              state.tasks.where((task) => task.isCompleted).length;
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: SizedBox(
+                      height: 200,
+                      child: TaskPieChart(
+                        totalTasks: totalTasks,
+                        completedTasks: completedTasks,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        buildLegendItem(
+                          color: Color.fromRGBO(75, 71, 184, 1),
+                          label: 'Completed',
+                        ),
+                        const SizedBox(width: 16),
+                        buildLegendItem(
+                          color: Color.fromRGBO(189, 187, 232, 1),
+                          label: 'Pending',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: AnimatedTaskList(listKey: _listKey, tasks: state.tasks),
+              ),
+            ],
           );
         },
       ),
