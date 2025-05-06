@@ -31,8 +31,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       titleController.text = widget.taskToEdit!.title;
       descController.text = widget.taskToEdit!.description;
       selectedDate = DateFormat.yMMMd().add_jm().parse(
-            widget.taskToEdit!.datetime,
-          );
+        widget.taskToEdit!.datetime,
+      );
     }
   }
 
@@ -89,7 +89,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       );
 
       context.read<TaskBloc>().add(AddTaskEvent(newTask));
-      addTaskToSupabase(id, title, desc, formattedDate);
+      // addTaskToSupabase(id, title, desc, formattedDate);
     } else {
       final updatedTask = widget.taskToEdit!.copyWith(
         title: title,
@@ -98,12 +98,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       );
 
       context.read<TaskBloc>().add(UpdateTaskEvent(updatedTask));
-      updateTaskInSupabase(
-        id: updatedTask.id,
-        title: updatedTask.title,
-        description: updatedTask.description,
-        datetime: updatedTask.datetime,
-      );
+      // updateTaskInSupabase(
+      //   id: updatedTask.id,
+      //   title: updatedTask.title,
+      //   description: updatedTask.description,
+      //   datetime: updatedTask.datetime,
+      // );
     }
 
     Navigator.pushNamedAndRemoveUntil(context, '/tasks', (route) => false);
@@ -180,9 +180,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           ? DateFormat.yMMMd().add_jm().format(selectedDate!)
                           : 'Select Date & Time',
                       style: TextStyle(
-                        color: selectedDate != null
-                            ? Colors.white
-                            : Colors.white54,
+                        color:
+                            selectedDate != null
+                                ? Colors.white
+                                : Colors.white54,
                         fontSize: 16,
                       ),
                     ),

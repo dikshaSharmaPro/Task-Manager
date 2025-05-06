@@ -5,7 +5,11 @@ class TaskPieChart extends StatelessWidget {
   final int totalTasks;
   final int completedTasks;
 
-  TaskPieChart({required this.totalTasks, required this.completedTasks});
+  const TaskPieChart({
+    super.key,
+    required this.totalTasks,
+    required this.completedTasks,
+  });
 
   @override
   Widget build(BuildContext context) {

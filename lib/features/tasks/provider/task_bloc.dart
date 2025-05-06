@@ -6,6 +6,8 @@ import '../data/task_model.dart';
 
 import 'task_state.dart';
 
+enum SortOption { dateNewest, dateOldest, completed, pending }
+
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   TaskBloc() : super(const TaskState()) {
     on<LoadTasksEvent>((event, emit) async {
@@ -45,6 +47,36 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         await SharedPreferencesHelper.saveTasks(updated);
         emit(state.copyWith(tasks: updated));
       }
+    });
+
+    on<UpdateSortOptionEvent>((event, emit) {
+      // Create a copy of the current task list
+      List<Task> sortedTasks = List.from(state.tasks);
+
+      // Sort the tasks based on the selected sort option
+      switch (event.option) {
+        case SortOption.dateNewest:
+          sortedTasks.sort(
+            (a, b) => b.datetime.compareTo(a.datetime),
+          ); // Use datetime for sorting
+          break;
+        case SortOption.dateOldest:
+          sortedTasks.sort((a, b) => a.datetime.compareTo(b.datetime));
+          break;
+        case SortOption.completed:
+          sortedTasks.sort(
+            (a, b) => (b.isCompleted ? 1 : 0) - (a.isCompleted ? 1 : 0),
+          ); // Completed tasks first
+          break;
+        case SortOption.pending:
+          sortedTasks.sort(
+            (a, b) => (a.isCompleted ? 1 : 0) - (b.isCompleted ? 1 : 0),
+          ); // Pending tasks first
+          break;
+      }
+
+      // Emit the updated state with the sorted tasks and selected sort option
+      emit(state.copyWith(tasks: sortedTasks, sortOption: event.option));
     });
   }
 }

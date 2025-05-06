@@ -1,4 +1,5 @@
 import 'package:taskmanager/features/tasks/data/task_model.dart';
+import 'package:taskmanager/features/tasks/provider/task_bloc.dart';
 
 abstract class TaskEvent {}
 
@@ -28,4 +29,9 @@ class UpdateTaskEvent extends TaskEvent {
 class SetTasksEvent extends TaskEvent {
   final List<Task> tasks;
   SetTasksEvent(this.tasks);
+}
+
+class UpdateSortOptionEvent extends TaskEvent {
+  final SortOption option;
+  UpdateSortOptionEvent(this.option);
 }

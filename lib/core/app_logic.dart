@@ -1,13 +1,26 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+class AppLogicException implements Exception {
+  final String message;
+  AppLogicException(this.message);
+
+  @override
+  String toString() => 'AppLogicException: $message';
+}
+
 Future<void> deleteTaskFromSupabase(String id) async {
   final supabase = Supabase.instance.client;
 
   try {
-    await supabase.from('tasks').delete().eq('id', id);
-    //print('Task deleted: $id');
+    final response = await supabase.from('tasks').delete().eq('id', id);
+
+    if (response.error != null) {
+      throw AppLogicException(
+        'Failed to delete task: ${response.error!.message}',
+      );
+    }
   } catch (e) {
-    // print(' Error deleting task: $e');
+    throw AppLogicException('An error occurred while deleting the task: $e');
   }
 }
 
@@ -20,7 +33,7 @@ Future<void> updateTaskInSupabase({
   final supabase = Supabase.instance.client;
 
   try {
-    await supabase
+    final response = await supabase
         .from('tasks')
         .update({
           'title': title,
@@ -29,9 +42,13 @@ Future<void> updateTaskInSupabase({
         })
         .eq('id', id);
 
-    //print(' Task updated: $id');
+    if (response.error != null) {
+      throw AppLogicException(
+        'Failed to update task: ${response.error!.message}',
+      );
+    }
   } catch (e) {
-    //print(' Error updating task: $e');
+    throw AppLogicException('An error occurred while updating the task: $e');
   }
 }
 
@@ -44,15 +61,21 @@ Future<void> addTaskToSupabase(
   final supabase = Supabase.instance.client;
 
   try {
-    await supabase.from('tasks').insert({
+    final response = await supabase.from('tasks').insert({
       'id': id,
       'title': title,
       'description': description,
       'datetime': datetime,
     });
 
-    //print(' Task inserted: $result');
+    if (response == null) {
+      throw AppLogicException('Failed to add task: Response is null.');
+    }
+
+    if (response.error != null) {
+      throw AppLogicException('Failed to add task: ${response.error!.message}');
+    }
   } catch (e) {
-    rethrow;
+    throw AppLogicException('An error occurred while adding the task: $e');
   }
 }

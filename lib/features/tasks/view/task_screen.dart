@@ -4,6 +4,7 @@ import 'package:taskmanager/core/routes.dart';
 import 'package:taskmanager/features/tasks/provider/task_bloc.dart';
 import 'package:taskmanager/features/tasks/provider/task_managementlogic.dart';
 import 'package:taskmanager/features/tasks/provider/task_state.dart';
+import 'package:taskmanager/features/tasks/widgets/sorting.dart';
 import 'package:taskmanager/features/tasks/widgets/task_pie_chart.dart';
 
 import '../widgets/animated_task_list.dart';
@@ -27,7 +28,7 @@ class _TaskScreenState extends State<TaskScreen> {
     context.read<TaskBloc>().add(LoadTasksEvent());
   }
 
-  void _resetAnimatedList(int count) {
+  void resetAnimatedList(int count) {
     for (int i = 0; i < count; i++) {
       try {
         _listKey.currentState?.insertItem(i);
@@ -103,7 +104,6 @@ class _TaskScreenState extends State<TaskScreen> {
       ),
       body: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {
-          // Animate on new task addition
           if (_listKey.currentState != null &&
               state.tasks.isNotEmpty &&
               !insertedIds.contains(state.tasks.first.id)) {
@@ -146,6 +146,16 @@ class _TaskScreenState extends State<TaskScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
+
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SortDropdown(),
+                ),
+              ),
+              const SizedBox(height: 10),
               Expanded(
                 child: AnimatedTaskList(listKey: _listKey, tasks: state.tasks),
               ),
@@ -163,7 +173,8 @@ class _TaskScreenState extends State<TaskScreen> {
 // import 'package:taskmanager/core/routes.dart';
 // import 'package:supabase_flutter/supabase_flutter.dart';
 // import 'package:taskmanager/features/tasks/provider/task_bloc.dart';
-// import 'package:taskmanager/features/tasks/provider/task_provider.dart';
+// import 'package:taskmanager/features/tasks/provider/task_managementlogic.dart';
+
 // import 'package:taskmanager/features/tasks/provider/task_state.dart';
 
 // import '../widgets/animated_task_list.dart';
@@ -190,11 +201,11 @@ class _TaskScreenState extends State<TaskScreen> {
 
 //     try {
 //       final response = await supabase.from('tasks').select();
-//       final taskList = (response as List<dynamic>)
-//           .map((data) => Task.fromJson(data))
-//           .toList();
+//       final taskList =
+//           (response as List<dynamic>)
+//               .map((data) => Task.fromJson(data))
+//               .toList();
 
-//       // Emit the new task list using BLoC
 //       context.read<TaskBloc>().add(SetTasksEvent(taskList));
 //       _resetAnimatedList(taskList.length);
 //     } catch (e) {
@@ -284,17 +295,16 @@ class _TaskScreenState extends State<TaskScreen> {
 //         builder: (context, state) {
 //           if (state.tasks.isEmpty) {
 //             return const Center(
-//               child: Text("No tasks available.",
-//                   style: TextStyle(color: Colors.white)),
+//               child: Text(
+//                 "No tasks available.",
+//                 style: TextStyle(color: Colors.white),
+//               ),
 //             );
 //           }
 
 //           return RefreshIndicator(
 //             onRefresh: _onRefresh,
-//             child: AnimatedTaskList(
-//               listKey: _listKey,
-//               tasks: state.tasks,
-//             ),
+//             child: AnimatedTaskList(listKey: _listKey, tasks: state.tasks),
 //           );
 //         },
 //       ),
